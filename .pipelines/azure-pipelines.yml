@@ -64,7 +64,7 @@ stages:
           return $authHeader
           }
 
-          $global:authToken = Get-AuthHeader -tenantId $(TENANT_ID) -clientId $(CLIENT_SECRET) -clientSecret $(CLIENT_SECRET)
+          $global:authToken = Get-AuthHeader -tenantId $(TENANT_ID) -clientId $(CLIENT_ID) -clientSecret $(CLIENT_SECRET)
           return Invoke-RestMethod -Uri https://graph.microsoft.com/beta/deviceManagement/deviceConfigurations/333b23ed-8232-4b47-a397-8628715b3621 -Headers $authToken -Method GET
 
 # - stage: getSourceObject
