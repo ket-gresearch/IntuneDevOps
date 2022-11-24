@@ -42,8 +42,12 @@ stages:
               grant_type="client_credentials"
           }
 
+          write-host $authBody
+
           $uri="https://login.microsoftonline.com/$(TENANT_ID)/oauth2/v2.0/token"
-          $accessToken=Invoke-WebRequest -Uri $uri -ContentType "application/x-www-form-urlencoded" -Body $authBody -Method Post -ErrorAction Stop -UseBasicParsing
+
+          write-host $uri
+          $accessToken=Invoke-WebRequest -Uri $uri -ContentType "application/x-www-form-urlencoded" -Body $authBody -Method Post -ErrorAction Stop -UseBasicParsing -verbose
           $accessToken=$accessToken.content | ConvertFrom-Json
 
           write-host $accessToken
