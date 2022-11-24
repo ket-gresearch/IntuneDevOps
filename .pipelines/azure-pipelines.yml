@@ -61,7 +61,7 @@ stages:
               'ExpiresOn'=$accessToken.expires_in
           }
 
-          return "$authHeader"
+          return $authHeader
           }
 
           $authToken = Get-AuthHeader
