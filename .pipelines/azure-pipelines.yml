@@ -38,7 +38,7 @@ stages:
           Install-Module Microsoft.Graph -Scope AllUsers -Force
           Get-Module Microsoft.Graph -ListAvailable | fl
           $global:authToken = Get-AuthHeader -tenantId $(TENANT_ID) -clientId $(CLIENT_SECRET) -clientSecret $(CLIENT_SECRET)
-          Invoke-RestMethod -Uri https://graph.microsoft.com/beta//deviceManagement/deviceConfigurations/333b23ed-8232-4b47-a397-8628715b3621 -Headers $authToken -Method GET
+          Invoke-RestMethod -Uri https://graph.microsoft.com/beta/deviceManagement/deviceConfigurations/333b23ed-8232-4b47-a397-8628715b3621 -Headers $authToken -Method GET
 
 # - stage: getSourceObject
 #   displayName: Get source object from dev
