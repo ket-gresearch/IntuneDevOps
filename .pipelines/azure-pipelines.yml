@@ -5,20 +5,20 @@
 
 variables:
  - group: IntuneREAD
-parameters:
-  - name: debug
-    displayName: Debug mode
-    type: boolean
-    default: false
-  - name: confType
-    displayName: Config Type
-    type: string
-    values:
-    - config-profile
-    - compliance-policy
-    - script
-    - remediation-script
-    - filter 
+# parameters:
+#   - name: debug
+#     displayName: Debug mode
+#     type: boolean
+#     default: false
+#   - name: confType
+#     displayName: Config Type
+#     type: string
+#     values:
+#     - config-profile
+#     - compliance-policy
+#     - script
+#     - remediation-script
+#     - filter 
 
 pool:
   vmImage: windows-latest
