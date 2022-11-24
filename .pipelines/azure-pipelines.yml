@@ -36,8 +36,8 @@ stages:
         targetType: 'inline'
         script: |
           $authBody=@{
-              client_id=$(CLIENT_ID)
-              client_secret=$(CLIENT_SECRET)
+              client_id="$(CLIENT_ID)"
+              client_secret="$(CLIENT_SECRET)"
               scope="https://graph.microsoft.com/.default"
               grant_type="client_credentials"
           }
