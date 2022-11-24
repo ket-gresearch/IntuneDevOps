@@ -18,10 +18,7 @@ parameters:
     - compliance-policy
     - script
     - remediation-script
-    - filter
-  - name: objectId
-    displayName: Object Id
-    type: string   
+    - filter 
 
 pool:
   vmImage: windows-latest
@@ -42,28 +39,33 @@ stages:
           Write-Host "Dev Tenant id: $(TENANT_ID)"
           Write-Host "-------------------------------"
           Write-Host "Intune object type to move: ${{parameters.confType}}"
-          Write-Host "Intune object id to move: ${{parameters.objectId}}"
           Write-Host "Debug mode: ${{parameters.debug}}"
 
-- stage: getSourceObject
-  displayName: Get source object from dev
-  jobs:
-  - job: get_object_from_dev
-    displayName: Get object from dev
-    steps:
-    - task: PowerShell@2
-      inputs:
-        filePath: '$(System.DefaultWorkingDirectory)/Get-IntuneObject.ps1'
-        arguments: '-tenantId $(TENANT_ID) -clientId $(CLIENT_ID) -clientSecret $(CLIENT_SECRET) -type ${{parameters.confType}} -objectId ${{parameters.objectId}}'
-    - task: CopyFiles@2
-      displayName: "Intune object to: $(build.artifactstagingdirectory)'"
-      inputs:
-        Contents: intuneObject.json
-        TargetFolder: $(build.artifactstagingdirectory)
-        flattenFolders: true
-    - publish: ' $(build.artifactstagingdirectory)'
-      displayName: 'Publish intune config json'
-      artifact: 'package'
+- script: | 
+    Install-Module Microsoft.Graph -Scope AllUsers -Force
+    Get-Module Microsoft.Graph -ListAvailable | fl
+    $global:authToken = Get-AuthHeader -tenantId $(TENANT_ID) -clientId $(CLIENT_SECRET) -clientSecret $(CLIENT_SECRET)
+    Invoke-RestMethod -Uri https://graph.microsoft.com/beta//deviceManagement/deviceConfigurations/333b23ed-8232-4b47-a397-8628715b3621 -Headers $authToken -Method GET
+
+# - stage: getSourceObject
+#   displayName: Get source object from dev
+#   jobs:
+#   - job: get_object_from_dev
+#     displayName: Get object from dev
+#     steps:
+#     - task: PowerShell@2
+#       inputs:
+#         filePath: '$(System.DefaultWorkingDirectory)/Get-IntuneObject.ps1'
+#         arguments: '-tenantId $(TENANT_ID) -clientId $(CLIENT_ID) -clientSecret $(CLIENT_SECRET) -type ${{parameters.confType}} -objectId ${{parameters.objectId}}'
+#     - task: CopyFiles@2
+#       displayName: "Intune object to: $(build.artifactstagingdirectory)'"
+#       inputs:
+#         Contents: intuneObject.json
+#         TargetFolder: $(build.artifactstagingdirectory)
+#         flattenFolders: true
+#     - publish: ' $(build.artifactstagingdirectory)'
+#       displayName: 'Publish intune config json'
+#       artifact: 'package'
 
 # - stage: publishToProd
 #   displayName: Publish object to prod
