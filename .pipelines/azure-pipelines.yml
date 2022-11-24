@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 variables:
- - group: IntuneDev
+ - group: IntuneREAD
 parameters:
   - name: debug
     displayName: Debug mode
@@ -39,7 +39,7 @@ stages:
         targetType: 'inline'
         script: |
           Write-Host "-------------------------------"
-          Write-Host "Dev Tenant id: $(DevTenantId)"
+          Write-Host "Dev Tenant id: $(TENANT_ID)"
           Write-Host "-------------------------------"
           Write-Host "Intune object type to move: ${{parameters.confType}}"
           Write-Host "Intune object id to move: ${{parameters.objectId}}"
@@ -54,7 +54,7 @@ stages:
     - task: PowerShell@2
       inputs:
         filePath: '$(System.DefaultWorkingDirectory)/Get-IntuneObject.ps1'
-        arguments: '-tenantId $(DevTenantId) -clientId $(DevAppId) -clientSecret $(DevAppSecret) -type ${{parameters.confType}} -objectId ${{parameters.objectId}}'
+        arguments: '-tenantId $(TENANT_ID) -clientId $(CLIENT_ID) -clientSecret $(CLIENT_SECRET) -type ${{parameters.confType}} -objectId ${{parameters.objectId}}'
     - task: CopyFiles@2
       displayName: "Intune object to: $(build.artifactstagingdirectory)'"
       inputs:
