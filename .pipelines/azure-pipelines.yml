@@ -5,7 +5,6 @@
 
 variables:
  - group: IntuneDev
- - group: IntuneProd
 parameters:
   - name: debug
     displayName: Debug mode
@@ -40,7 +39,6 @@ stages:
         targetType: 'inline'
         script: |
           Write-Host "-------------------------------"
-          Write-Host "Prod Tenant id: $(ProdTenantId)"
           Write-Host "Dev Tenant id: $(DevTenantId)"
           Write-Host "-------------------------------"
           Write-Host "Intune object type to move: ${{parameters.confType}}"
@@ -67,20 +65,20 @@ stages:
       displayName: 'Publish intune config json'
       artifact: 'package'
 
-- stage: publishToProd
-  displayName: Publish object to prod
-  jobs:
-  # Download artifact
-  - job: publish_to_prod
-    displayName: Publish object to prod
-    steps:
-    - task: DownloadPipelineArtifact@2
-      displayName: 'Download Pipeline Artifact'
-      inputs:
-        artifactName: 'package'
+# - stage: publishToProd
+#   displayName: Publish object to prod
+#   jobs:
+#   # Download artifact
+#   - job: publish_to_prod
+#     displayName: Publish object to prod
+#     steps:
+#     - task: DownloadPipelineArtifact@2
+#       displayName: 'Download Pipeline Artifact'
+#       inputs:
+#         artifactName: 'package'
 
-    - task: PowerShell@2
-      inputs:
-        filePath: '$(System.DefaultWorkingDirectory)/Deploy-IntuneObject.ps1'
-        arguments: '-tenantId $(ProdTenantId) -clientId $(ProdAppId) -clientSecret $(ProdAppSecret) -type ${{parameters.confType}} -path "$(Pipeline.Workspace)/intuneObject.json"'
+    # - task: PowerShell@2
+    #   inputs:
+    #     filePath: '$(System.DefaultWorkingDirectory)/Deploy-IntuneObject.ps1'
+    #     arguments: '-tenantId $(ProdTenantId) -clientId $(ProdAppId) -clientSecret $(ProdAppSecret) -type ${{parameters.confType}} -path "$(Pipeline.Workspace)/intuneObject.json"'
 
