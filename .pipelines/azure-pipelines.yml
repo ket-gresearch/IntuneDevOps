@@ -35,9 +35,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Install-Module Microsoft.Graph -Scope AllUsers -Force
-          Get-Module Microsoft.Graph -ListAvailable | fl
-
           $authBody=@{
               client_id=$(CLIENT_ID)
               client_secret=$(CLIENT_SECRET)
@@ -48,6 +45,8 @@ stages:
           $uri="https://login.microsoftonline.com/$(TENANT_ID)/oauth2/v2.0/token"
           $accessToken=Invoke-WebRequest -Uri $uri -ContentType "application/x-www-form-urlencoded" -Body $authBody -Method Post -ErrorAction Stop -UseBasicParsing
           $accessToken=$accessToken.content | ConvertFrom-Json
+
+          write-host $accessToken
 
           $authHeader = @{
               'Content-Type'='application/json'
